@@ -51,7 +51,7 @@ const server = http.createServer((req, res) => {
 
     try{
       const cookies = req.headers.cookie;
-      console.log("cookie: ", cookie);
+      console.log("cookie: ", cookies);
     
       let token;
       
