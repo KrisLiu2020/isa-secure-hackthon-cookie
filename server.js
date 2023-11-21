@@ -48,35 +48,47 @@ const server = http.createServer((req, res) => {
     /*\ /something */
   } else if (req.url === '/hackathon/server/something' && req.method === 'GET') {
     // Check if the user is logged in by checking the cookie
-    const cookie = req.headers.cookie;
+
+    try{
+      const cookie = req.headers.cookie;
+      console.log("cookie: ", cookie);
     
-    let token;
-    
-    if (cookie) {
-        const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
-          const [key, value] = cookie.trim().split('=');
-          acc[key] = value;
-          return acc;
-        }, {});
-    
-        token = parsedCookies.token;
+      let token;
+      
+      if (cookie) {
+          const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
+            const [key, value] = cookie.trim().split('=');
+            acc[key] = value;
+            return acc;
+          }, {});
+      
+          token = parsedCookies.token;
+      }
+  
+      console.log("token: ", token);
+      
+      let decode = verify(token, "BENISCOOL");
+      let jwt_user = decode.username;
+      
+      if (jwt_user == "admin") {
+          console.log("Logged in as login");
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: 'You are logged in, here is treasure trove!!' }));
+      } else {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Unauthorized: You are not logged in.' }));
+      }
+      
+      
+    } catch (err){
+      console.log("GET SOMETHING ERROR: ", err);
     }
-    
-    let decode = verify(token, "BENISCOOL");
-    let jwt_user = decode.username;
-    
-    if (jwt_user == "admin") {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'You are logged in, here is treasure trove!!' }));
     
     
     // if (cookie && cookie.includes('token=123456')) {
     //   res.writeHead(200, { 'Content-Type': 'application/json' });
     //   res.end(JSON.stringify({ message: 'You are logged in, here is treasure trove!!' }));
-    } else {
-      res.writeHead(401, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Unauthorized: You are not logged in.' }));
-    }
+    
   } else {
     // For any other route, return 404 not found
     res.writeHead(404, { 'Content-Type': 'text/html' });
