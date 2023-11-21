@@ -7,7 +7,7 @@ const server = http.createServer((req, res) => {
   // it would mean HTML file is being served via the file:// protocol directly from your filesystem rather than over HTTP or HTTPS.
   console.log('Request origin:', req.headers.origin);
   const origin = req.headers.origin || '*';
-  res.setHeader('Access-Control-Allow-Origin', '*');// Adjust the port if necessary
+  res.setHeader('Access-Control-Allow-Origin', origin);// Adjust the port if necessary
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
