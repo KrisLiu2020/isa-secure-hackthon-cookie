@@ -50,12 +50,12 @@ const server = http.createServer((req, res) => {
     // Check if the user is logged in by checking the cookie
 
     try{
-      const cookie = req.headers.cookie;
+      const cookies = req.headers.cookie;
       console.log("cookie: ", cookie);
     
       let token;
       
-      if (cookie) {
+      if (cookies) {
           const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
             const [key, value] = cookie.trim().split('=');
             acc[key] = value;
